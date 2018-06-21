@@ -10,6 +10,9 @@ import nltk
 sentences_fileName = ''
 images_fileName = ''
 
+correct_X = tf.placeholder(tf.float32, [None, 2])
+wrong_X = tf.placeholder(tf.float32, [None, 2])
+
 sample_sentences = [['this', 'is', 'the', 'first', 'sentence', 'for', 'word2vec'],
 			['this', 'is', 'the', 'second', 'sentence'],
 			['yet', 'another', 'sentence'],
