@@ -83,3 +83,6 @@ def train():
     		if i % steps_per_epoch == 0 and i > 0:
 	            print('Saving checkpoint at step %d' % i)
 	            saver.save(sess, FLAGS.save_dir, global_step = global_step)
+
+if __name__ == '__main__':
+	train()
