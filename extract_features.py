@@ -6,13 +6,19 @@ from keras.applications.vgg16 import preprocess_input
 from gensim.models import Word2Vec as w2v 
 from gensim.scripts.glove2word2vec import glove2word2vec
 from gensim.models import KeyedVectors
-
+import nltk
 import numpy as np
+
+def tokenize_sentences(img_desc):
+	tokens = []
+	for i in img_desc:
+		for j in i:
+			tokens.append(nltk.word_tokenize(j))
+	return tokens
 
 def get_img_features_vgg16(img_path):
 	model = VGG16(weights='imagenet', include_top=False) # to extract features 
 	print("Loaded VGG16 model loaded successfully.")
-	print(model.summary())
 	img = image.load_img(img_path)
 	x = image.img_to_array(img)
 	x = np.expand_dims(x, axis=0)
