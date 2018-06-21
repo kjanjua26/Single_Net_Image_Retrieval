@@ -18,7 +18,8 @@ def get_img_features_vgg16(img_path):
 	x = np.expand_dims(x, axis=0)
 	x = preprocess_input(x)
 	features = model.predict(x)
-	return features # img features returned
+	features = np.array(features)
+	return features.flatten() # img features returned
 
 def get_w2v_model(sentences):
 	model = w2v(sentences, min_count=1, workers=4)
