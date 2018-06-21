@@ -58,31 +58,32 @@ def train():
 
 	loss = network.compute_loss(correct_X, wrong_X)
 	global_step = tf.Variable(0, trainable=False)
-    init_learning_rate = 0.0001
-    learning_rate = tf.train.exponential_decay(init_learning_rate, global_step, steps_per_epoch, 0.794, staircase=True)
-    optim = tf.train.AdamOptimizer(init_learning_rate)
-    update_ops = tf.get_collection(tf.GraphKeys.UPDATE_OPS)
-    with tf.control_dependencies(update_ops):
-        train_step = optim.minimize(loss, global_step=global_step)
-    saver = tf.train.Saver(save_relative_paths=True)
+	init_learning_rate = 0.0001
+	learning_rate = tf.train.exponential_decay(init_learning_rate, global_step, steps_per_epoch, 0.794, staircase=True)
+	optim = tf.train.AdamOptimizer(init_learning_rate)
+	update_ops = tf.get_collection(tf.GraphKeys.UPDATE_OPS)
+	with tf.control_dependencies(update_ops):
+	train_step = optim.minimize(loss, global_step=global_step)
+	saver = tf.train.Saver(save_relative_paths=True)
 
-    with tf.Session() as sess:
-        sess.run(tf.global_variables_initializer())
-        if restore_path:
-            print('restoring checkpoint', restore_path)
-            saver.restore(sess, restore_path.replace('.meta', ''))
-            print('done')
-        for i in range(num_steps):
-        	 feed_dict = {
-                    correct_X: correct_fts,
-                    wrong_X : wrong_fts
-              	}
-        	_, loss_Val = sess.run([train_step, loss], feed_dict=feed_dict)
-        	if i % 10 == 0: 
-        		print('Epoch: %d Step: %d Loss: %f' % (i // steps_per_epoch, i, loss_Val))
-    		if i % steps_per_epoch == 0 and i > 0:
-	            print('Saving checkpoint at step %d' % i)
-	            saver.save(sess, FLAGS.save_dir, global_step = global_step)
+	with tf.Session() as sess:
+	sess.run(tf.global_variables_initializer())
+	if restore_path:
+	    print('restoring checkpoint', restore_path)
+	    saver.restore(sess, restore_path.replace('.meta', ''))
+	    print('done')
+	for i in range(num_steps):
+		 feed_dict = {
+		    correct_X: correct_fts,
+		    wrong_X : wrong_fts
+		}
+		_, loss_Val = sess.run([train_step, loss], feed_dict=feed_dict)
+		if i % 10 == 0: 
+			print('Epoch: %d Step: %d Loss: %f' % (i // steps_per_epoch, i, loss_Val))
+		if i % steps_per_epoch == 0 and i > 0:
+		    print('Saving checkpoint at step %d' % i)
+		    saver.save(sess, FLAGS.save_dir, global_step = global_step)
+
 
 if __name__ == '__main__':
 	train()
