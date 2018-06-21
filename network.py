@@ -12,7 +12,6 @@ def pairwise_loss(x1, x2):
     loss_mean = tf.reduce_mean(loss)
     return loss_mean
 
-
 def network(corr_X, neg_X):
 	# for corr_X
 	corr_fconn_1 = tf.contrib.layers.fully_connected(corr_X, 2048, activation_fn=None, scope='corr_fconn_1')
