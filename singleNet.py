@@ -3,11 +3,6 @@ import tensorflow as tf
 import numpy as np 
 import pandas as pd 
 import math
-from keras.applications.vgg16 import VGG16
-from keras.preprocessing import image
-from keras.applications.vgg16 import preprocess_input
-from gensim.models import KeyedVectors # to load google's w2v model
-from gensim.models import Word2Vec as w2v 
 import extract_features
 
 sentences_fileName = ''
