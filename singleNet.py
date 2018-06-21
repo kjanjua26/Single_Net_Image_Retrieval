@@ -45,5 +45,5 @@ print("Img size: ", img_features.size)
 print("sent_features_2d shape: ", sent_features_2d.shape)
 print("2D Image Shape: ", img_features_2d.shape)
 
-total_features = np.concatenate((img_features_2d, sent_features_2d), axis=0)
-print("Total Shape: ", total_features.shape)
+correct_fts = np.concatenate((img_features_2d, sent_features_2d), axis=0)
+print("Total Shape: ", correct_fts.shape)
