@@ -8,7 +8,7 @@ def pairwise_loss(x1, x2):
     margin = tf.constant(1.)     
     match_loss = tf.square(l2diff, 'match_loss')
     mismatch_loss = tf.maximum(0., tf.sub(margin, tf.square(l2diff)), 'mismatch_term')
-    loss = tf.add(1, tf.mul((1 - labels), mismatch_loss), 'loss_add') # margin
+    loss = tf.add(1., mismatch_loss), 'loss_add') # margin
     loss_mean = tf.reduce_mean(loss)
     return loss_mean
 
