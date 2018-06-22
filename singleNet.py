@@ -63,10 +63,10 @@ def train():
 
 	with tf.Session() as sess:
 		sess.run(tf.global_variables_initializer())
-		if restore_path:	
-		    print('restoring checkpoint', restore_path)
-		    saver.restore(sess, restore_path.replace('.meta', ''))
-		    print('done')
+		#if restore_path:	
+		#    print('restoring checkpoint', restore_path)
+		#    saver.restore(sess, restore_path.replace('.meta', ''))
+		#    print('done')
 		for i in range(num_steps):
 			feed_dict = {
 			    correct_X: correct_fts,
