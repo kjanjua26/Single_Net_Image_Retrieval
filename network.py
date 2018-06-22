@@ -1,14 +1,18 @@
 import tensorflow as tf 
+import numpy as np 
 
 def pairwise_loss(x1, x2):
-    l2diff = tf.sqrt( tf.reduce_sum(tf.square(tf.subtract(x1, x2)), reduction_indices=1))
-    margin = tf.constant(1.)     
-    match_loss = tf.square(l2diff, 'match_term')
-    mismatch_loss = tf.maximum(0., tf.subtract(margin, tf.square(l2diff)), 'mismatch_term')
-    loss = tf.add(1., tf.multiply(1., mismatch_loss), 'loss_add')
-    loss_mean = tf.reduce_mean(loss)
-    return loss_mean
-
+	# reshaping the vectors 
+	x1_reshaped = tf.reshape(tf.reduce_sum(x1*x1, axis=1), [-1, 1])
+    	x2_reshaped = tf.reshape(tf.reduce_sum(x2*x2, axis=1), [1, -1])
+	two_point_dist = tf.sqrt(x1_reshaped - 2 * tf.matmul(x1, tf.transpose(x2)) + x2_reshaped + 1e-4) # computing the two point distance. 
+	#l2diff = tf.sqrt(tf.reduce_sum(tf.square(tf.subtract(x1, x2)), reduction_indices=1))
+	margin = tf.constant(1.)     
+	match_loss = tf.square(two_point_dist, 'match_term')
+	mismatch_loss = tf.maximum(0., tf.subtract(margin, tf.square(two_point_dist)), 'mismatch_term')
+	loss = tf.add(1., tf.multiply(1., mismatch_loss), 'loss_add')
+	loss_mean = tf.reduce_mean(loss)
+	return loss_mean
 
 def network(corr_X, neg_X):
 	# for corr_X
