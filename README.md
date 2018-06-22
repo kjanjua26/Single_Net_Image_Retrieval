@@ -9,3 +9,11 @@ An End-to-End network for Multi Modal Deep Learning.
   <li> Reshapped tensors to compute loss.
   <li> Training tested.
 </ol>
+
+## Tasks To Be Done.
+
+<ol>
+  <li> Change word2vec with Doc2vec. 
+  <li> Re-write training code.
+  <li> Helper code to make pairs and compute shape.
+</ol>
