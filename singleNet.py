@@ -8,8 +8,6 @@ import network
 import data_utilities
 # Using the flickr30k dataset 
 
-sentences_fileName = ''
-images_fileName = ''
 num_steps = 500
 steps_per_epoch = 100
 init_learning_rate = 0.0001
