@@ -5,6 +5,7 @@ import pandas as pd
 import math
 import extract_features
 import network
+import data_utilities
 # Using the flickr30k dataset 
 
 sentences_fileName = ''
@@ -12,42 +13,47 @@ images_fileName = ''
 num_steps = 500
 steps_per_epoch = 100
 init_learning_rate = 0.0001
+num_train_samples = 5
 restore_path = 'models/'
 
-correct_X = tf.placeholder(tf.float32, shape=[None, 2])
-wrong_X = tf.placeholder(tf.float32, shape=[None, 2])
+correct_X = tf.placeholder(tf.float32, shape=[num_train_samples, None])
+wrong_X = tf.placeholder(tf.float32, shape=[num_train_samples, None])
 
-# temporary data 
-sample_sentences = [['this', 'is', 'the', 'first', 'sentence', 'for', 'word2vec'],
-			['this', 'is', 'the', 'second', 'sentence'],
-			['yet', 'another', 'sentence'],
-			['one', 'more', 'sentence'],
-			['and', 'the', 'final', 'sentence']]
+"""
+	# temporary data 
+	sample_sentences = [['this', 'is', 'the', 'first', 'sentence', 'for', 'word2vec'],
+				['this', 'is', 'the', 'second', 'sentence'],
+				['yet', 'another', 'sentence'],
+				['one', 'more', 'sentence'],
+				['and', 'the', 'final', 'sentence']]
 
-img_dec = [['A person wearing a black jacket is bending over a table'],
-		['An old person is wearing a black jacket'], 
-		['An old person in black jacket is trying to pick up something']]
-img = 'sampleImages/1.jpg'
+	img_dec = [['A person wearing a black jacket is bending over a table'],
+			['An old person is wearing a black jacket'], 
+			['An old person in black jacket is trying to pick up something']]
+	img = 'sampleImages/1.jpg'
 
-tokens = extract_features.tokenize_sentences(img_dec)
+	tokens = extract_features.tokenize_sentences(img_dec)
 
-img_features = extract_features.get_img_features_vgg16(img)
-sent_features = extract_features.get_w2v_model(tokens)
-sent_fts_wr = extract_features.get_w2v_model(sample_sentences)
+	img_features = extract_features.get_img_features_vgg16(img)
+	sent_features = extract_features.get_w2v_model(tokens)
+	sent_fts_wr = extract_features.get_w2v_model(sample_sentences)
 
-print("Reshaping the features!")
-print("Image Shape: ", img_features.shape)
-print("Sentence Shape: ", sent_features.shape)
-img_features_2d = np.reshape(img_features, (-1, 2)) # converting to 2d feature array
-sent_features_2d = np.reshape(sent_features, (-1, 2))
-sent_ft_wr_2d = np.reshape(sent_fts_wr, (-1, 2))
-print("Img size: ", img_features.size)
-print("sent_features_2d shape: ", sent_features_2d.shape)
-print("2D Image Shape: ", img_features_2d.shape)
-print("sent_ft_wr_2d shape: ",sent_ft_wr_2d.shape)
-correct_fts = np.concatenate((img_features_2d, sent_features_2d), axis=0)
-wrong_fts = np.concatenate((img_features_2d, sent_ft_wr_2d), axis=0)
-print("Total Shape: ", correct_fts.shape)
+	print("Reshaping the features!")
+	print("Image Shape: ", img_features.shape)
+	print("Sentence Shape: ", sent_features.shape)
+	img_features_2d = np.reshape(img_features, (-1, 2)) # converting to 2d feature array
+	sent_features_2d = np.reshape(sent_features, (-1, 2))
+	sent_ft_wr_2d = np.reshape(sent_fts_wr, (-1, 2))
+	print("Img size: ", img_features.size)
+	print("sent_features_2d shape: ", sent_features_2d.shape)
+	print("2D Image Shape: ", img_features_2d.shape)
+	print("sent_ft_wr_2d shape: ",sent_ft_wr_2d.shape)
+	correct_fts = np.concatenate((img_features_2d, sent_features_2d), axis=0)
+	wrong_fts = np.concatenate((img_features_2d, sent_ft_wr_2d), axis=0)
+	print("Total Shape: ", correct_fts.shape)
+"""
+
+corr_fts_train = data_utilities._get_training_data_corr()
 
 
 # train the network 
