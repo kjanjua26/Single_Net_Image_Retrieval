@@ -4,8 +4,10 @@ from keras.applications.vgg16 import VGG16
 from keras.preprocessing import image
 from keras.applications.vgg16 import preprocess_input
 from gensim.models import Word2Vec as w2v 
+from gensim.models.doc2vec import TaggedDocument
 from gensim.scripts.glove2word2vec import glove2word2vec
 from gensim.models import KeyedVectors
+from gensim.models.doc2vec import Doc2Vec as d2v
 import nltk
 import numpy as np
 
@@ -32,6 +34,14 @@ def get_w2v_model(sentences):
 	print("Word2Vec Model Loaded Successfully.")
 	features = model[model.wv.vocab]
 	return features
+
+def get_doc2v_model(sentences, name): # doc2vec code
+	img_desc = []
+	img_desc.append(TaggedDocument(words=sentences.split(), tags=[name]))
+	model = d2v(vector_size=100, min_count=5, workers=5)
+	model.build_vocab(img_desc)
+	print("Doc2Vec Model Loaded Successfully.")
+	return  model.docvecs[0]
 
 def get_glove_model(sentences):
 	emb_ft = []
