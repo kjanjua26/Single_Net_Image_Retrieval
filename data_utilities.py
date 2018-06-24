@@ -39,6 +39,8 @@ def _get_sent_img_features_corr():
 		print "Corr_Fts Shape: ", corr_fts.shape
 		correct_list.append(corr_fts)
 		print ""
-	return correct_list
+	correct_list_arr = np.asarray(correct_list)
+	print "Shape of correct_list Array: ", correct_list_arr.shape
+	return correct_list_arr # returned feature array. 
 
 _get_sent_img_features_corr()
