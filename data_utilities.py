@@ -23,7 +23,7 @@ for i in glob.glob(img_path+"/*.jpg"):
 	img_ft = extract_features.get_img_features_vgg16(img_name)
 	print "For {0}".format(img_name)
 	sents_rt = _get_sentences(name)
-	sent_fts = extract_features.get_doc2v_model(sents_rt)
+	sent_fts = extract_features.get_doc2v_model(sents_rt) # doesn't work properly.
 	print "Feature: ", type(sent_fts)
 	sent_ft_lst.append(sent_fts)
 	print "Features: ", type(img_ft)
