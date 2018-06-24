@@ -2,7 +2,7 @@ import tensorflow as tf
 import numpy as np 
 
 def pairwise_loss(x1, x2):
-	# reshaping the vectors 
+	# reshaping the tensors 
 	x1_reshaped = tf.reshape(tf.reduce_sum(x1*x1, axis=1), [-1, 1])
     	x2_reshaped = tf.reshape(tf.reduce_sum(x2*x2, axis=1), [1, -1])
 	two_point_dist = tf.sqrt(x1_reshaped - 2 * tf.matmul(x1, tf.transpose(x2)) + x2_reshaped + 1e-4) # computing the two point distance. 
