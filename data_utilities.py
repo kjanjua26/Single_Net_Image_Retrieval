@@ -19,7 +19,7 @@ def _get_sentences(img_name):
 			img_desc.append(TaggedDocument(words=sent.split(), tags=[img_name]))
 	return img_desc
 
-def _get_sent_img_features_corr():
+def _get_training_data_corr():
 	correct_list = []
 	for i in glob.glob(img_path+"/*.jpg"):
 		i = i.split("/", 2)
@@ -42,5 +42,3 @@ def _get_sent_img_features_corr():
 	correct_list_arr = np.asarray(correct_list)
 	print "Shape of correct_list Array: ", correct_list_arr.shape
 	return correct_list_arr # returned feature array. 
-
-_get_sent_img_features_corr()
