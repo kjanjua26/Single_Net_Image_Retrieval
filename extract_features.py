@@ -35,11 +35,9 @@ def get_w2v_model(sentences):
 	features = model[model.wv.vocab]
 	return features
 
-def get_doc2v_model(sentences, name): # doc2vec code
-	img_desc = []
-	img_desc.append(TaggedDocument(words=sentences.split(), tags=[name]))
+def get_doc2v_model(sentences): # doc2vec code
 	model = d2v(vector_size=100, min_count=5, workers=5)
-	model.build_vocab(img_desc)
+	model.build_vocab(sentences)
 	print("Doc2Vec Model Loaded Successfully.")
 	return  model.docvecs[0]
 
