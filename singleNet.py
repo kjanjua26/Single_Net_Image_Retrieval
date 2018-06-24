@@ -8,6 +8,8 @@ import network
 import data_utilities
 # Using the flickr30k dataset 
 
+sentences_fileName = ''
+images_fileName = ''
 num_steps = 500
 steps_per_epoch = 100
 init_learning_rate = 0.0001
@@ -52,7 +54,7 @@ wrong_X = tf.placeholder(tf.float32, shape=[num_train_samples, None])
 """
 
 corr_fts_train = data_utilities._get_training_data_corr()
-
+wrong_fts_train = data_utilities._get_training_data_wrong()
 
 # train the network 
 def train():
@@ -69,8 +71,8 @@ def train():
 		sess.run(tf.global_variables_initializer())
 		for i in range(num_steps):
 			feed_dict = {
-			    correct_X: correct_fts,
-			    wrong_X: wrong_fts
+			    correct_X: corr_fts_train,
+			    wrong_X: wrong_fts_train
 			}
 			_, loss_Val = sess.run([train_step, loss], feed_dict=feed_dict)
 			print('Epoch: %d Step: %d Loss: %f' % (i // steps_per_epoch, i, loss_Val))
