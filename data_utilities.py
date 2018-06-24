@@ -19,7 +19,8 @@ def _get_sentences(img_name):
 			img_desc.append(TaggedDocument(words=sent.split(), tags=[img_name]))
 	return img_desc
 
-def _get_sent_img_features():
+def _get_sent_img_features_corr():
+	correct_list = []
 	for i in glob.glob(img_path+"/*.jpg"):
 		i = i.split("/", 2)
 		name = i[2].replace(".jpg","")
@@ -30,6 +31,14 @@ def _get_sent_img_features():
 		sent_fts = extract_features.get_doc2v_model(sent_list)
 		print "Sentence Feature: ", type(sent_fts), sent_fts.shape
 		print "Image Features: ", type(img_ft), img_ft.shape
+		img_ft_reshaped = np.reshape(img_ft, (-1, 2))
+		sent_ft_reshaped = np.reshape(sent_fts, (-1,2))
+		print "Reshaped Sent Feature: ", sent_ft_reshaped.shape
+		print "Reshaped Img Feature: ", img_ft_reshaped.shape
+		corr_fts = np.concatenate((img_ft_reshaped, sent_ft_reshaped), axis=0)
+		print "Corr_Fts Shape: ", corr_fts.shape
+		correct_list.append(corr_fts)
 		print ""
+	return correct_list
 
-_get_sent_img_features()
+_get_sent_img_features_corr()
