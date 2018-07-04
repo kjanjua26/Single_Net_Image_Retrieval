@@ -16,8 +16,8 @@ init_learning_rate = 0.0001
 num_train_samples = 5
 restore_path = 'models/'
 
-correct_X = tf.placeholder(tf.float32, shape=[num_train_samples, None])
-wrong_X = tf.placeholder(tf.float32, shape=[num_train_samples, None])
+correct_X = tf.placeholder(tf.float32, shape=[None, 2])
+wrong_X = tf.placeholder(tf.float32, shape=[None, 2])
 
 """
 	# temporary data 
