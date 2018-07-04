@@ -16,13 +16,17 @@ steps_per_epoch = 100
 init_learning_rate = 0.0001
 num_train_samples = 31783
 restore_path = 'models/'
-os.environ["CUDA_VISIBLE_DEVICES"] = ""
+os.environ["CUDA_VISIBLE_DEVICES"] = "2"
 
 correct_X = tf.placeholder(tf.float32, shape=[None, 2])
 wrong_X = tf.placeholder(tf.float32, shape=[None, 2])
 
-corr_fts_train = data_utilities._get_training_data_corr()
-wrong_fts_train = data_utilities._get_training_data_wrong()
+if os.path.isfile("wrong_fts.npy") and os.path.isfile("corr_fts.npy"):
+	corr_fts_train = np.load('corr_fts.npy')
+	wrong_fts_train = np.load('wrong_fts.npy')
+else:
+	corr_fts_train = data_utilities._get_training_data_corr()
+	wrong_fts_train = data_utilities._get_training_data_wrong()
 
 # train the network 
 def train():
