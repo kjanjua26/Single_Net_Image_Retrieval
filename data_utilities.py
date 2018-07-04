@@ -7,7 +7,7 @@ import extract_features
 import random
 
 sent_path = '/home/super/datasets/flicker30/results_20130124_orig.token' # a text file containing sentences
-img_path = '/home/super/datasets/flicker30/images/train/flickr30k_images'
+img_path = '/home/super/datasets/flicker30/images/train/flickr30k_100images'
 sent_file = open(sent_path, 'r').readlines()
 
 def _get_corr_sentences(img_name):	
@@ -37,12 +37,14 @@ def _get_corr_sentences_wrong(img_name):
 
 def _get_training_data_corr():
 	correct_list = []
+	count = 0
 	for i in glob.glob(img_path+"/*.jpg"):
+		count += 1
 		i_ed = i.split("/", 8)
 		name = i_ed[8].replace(".jpg","")
 		img_name = i
 		img_ft = extract_features.get_img_features_vgg16(img_name)
-		print("For {0}".format(img_name))
+		print("For Count: {0}, {1}".format(count,img_name))
 		sent_list = _get_corr_sentences(name)
 		sent_fts = extract_features.get_doc2v_model(sent_list)
 		print("Sentence Feature: ", type(sent_fts), sent_fts.shape)
@@ -62,12 +64,14 @@ def _get_training_data_corr():
 
 def _get_training_data_wrong():
 	wrong_list = []
+	count = 0
 	for i in glob.glob(img_path+"/*.jpg"):
+		count += 1
 		i_ed = i.split("/", 8)
 		name = i_ed[8].replace(".jpg","")
 		img_name = i
 		img_ft = extract_features.get_img_features_vgg16(img_name)
-		print("For {0}".format(img_name))
+		print("For Count: {0}, {1}".format(count,img_name))
 		sent_list = _get_corr_sentences_wrong(name)
 		sent_fts = extract_features.get_doc2v_model(sent_list)
 		print("Sentence Feature: ", type(sent_fts), sent_fts.shape)
