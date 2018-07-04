@@ -57,6 +57,7 @@ def _get_training_data_corr():
 		print("")
 	correct_list_arr = np.concatenate(correct_list, axis=0)
 	print("Shape of stacked: ", correct_list_arr.shape)
+	np.save('corr_fts.npy', correct_list_arr)
 	return correct_list_arr # returned feature array. 
 
 def _get_training_data_wrong():
@@ -81,6 +82,7 @@ def _get_training_data_wrong():
 		print("")
 	wrong_list_arr = np.concatenate(wrong_list, axis=0)
 	print("Shape of stacked: ", wrong_list_arr.shape)
+	np.save('wrong_fts.npy', wrong_list_arr)
 	return wrong_list_arr # returned feature array. 
 
 
