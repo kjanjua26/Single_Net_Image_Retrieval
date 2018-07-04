@@ -6,8 +6,8 @@ from gensim.models.doc2vec import TaggedDocument
 import extract_features
 import random
 
-sent_path = 'flicker-sample/sentences-flicker.txt' # a text file containing sentences
-img_path = 'flicker-sample/images'
+sent_path = '/home/super/datasets/flicker30/results_20130124_orig.token' # a text file containing sentences
+img_path = '/home/super/datasets/flicker30/images/train/flickr30k_images'
 sent_file = open(sent_path, 'r').readlines()
 
 def _get_corr_sentences(img_name):	
@@ -38,47 +38,55 @@ def _get_corr_sentences_wrong(img_name):
 def _get_training_data_corr():
 	correct_list = []
 	for i in glob.glob(img_path+"/*.jpg"):
-		i = i.split("/", 2)
-		name = i[2].replace(".jpg","")
-		img_name = "flicker-sample/images/" + i[2]
+		i_ed = i.split("/", 8)
+		name = i_ed[8].replace(".jpg","")
+		img_name = i
 		img_ft = extract_features.get_img_features_vgg16(img_name)
-		print "For {0}".format(img_name)
+		print("For {0}".format(img_name))
 		sent_list = _get_corr_sentences(name)
 		sent_fts = extract_features.get_doc2v_model(sent_list)
-		print "Sentence Feature: ", type(sent_fts), sent_fts.shape
-		print "Image Features: ", type(img_ft), img_ft.shape
+		print("Sentence Feature: ", type(sent_fts), sent_fts.shape)
+		print("Image Features: ", type(img_ft), img_ft.shape)
 		img_ft_reshaped = np.reshape(img_ft, (-1, 2))
 		sent_ft_reshaped = np.reshape(sent_fts, (-1,2))
-		print "Reshaped Sent Feature: ", sent_ft_reshaped.shape
-		print "Reshaped Img Feature: ", img_ft_reshaped.shape
+		print("Reshaped Sent Feature: ", sent_ft_reshaped.shape)
+		print("Reshaped Img Feature: ", img_ft_reshaped.shape)
 		corr_fts = np.concatenate((img_ft_reshaped, sent_ft_reshaped), axis=0)
-		print "Corr_Fts Shape: ", corr_fts.shape
+		print("Corr_Fts Shape: ", corr_fts.shape)
 		correct_list.append(corr_fts)
-		print ""
+		print("")
 	correct_list_arr = np.concatenate(correct_list, axis=0)
-	print "Shape of stacked: ", correct_list_arr.shape
+	print("Shape of stacked: ", correct_list_arr.shape)
 	return correct_list_arr # returned feature array. 
 
 def _get_training_data_wrong():
 	wrong_list = []
 	for i in glob.glob(img_path+"/*.jpg"):
-		i = i.split("/", 2)
-		name = i[2].replace(".jpg","")
-		img_name = "flicker-sample/images/" + i[2]
+		i_ed = i.split("/", 8)
+		name = i_ed[8].replace(".jpg","")
+		img_name = i
 		img_ft = extract_features.get_img_features_vgg16(img_name)
-		print "For {0}".format(img_name)
+		print("For {0}".format(img_name))
 		sent_list = _get_corr_sentences_wrong(name)
 		sent_fts = extract_features.get_doc2v_model(sent_list)
-		print "Sentence Feature: ", type(sent_fts), sent_fts.shape
-		print "Image Features: ", type(img_ft), img_ft.shape
+		print("Sentence Feature: ", type(sent_fts), sent_fts.shape)
+		print("Image Features: ", type(img_ft), img_ft.shape)
 		img_ft_reshaped = np.reshape(img_ft, (-1, 2))
 		sent_ft_reshaped = np.reshape(sent_fts, (-1,2))
-		print "Reshaped Sent Feature: ", sent_ft_reshaped.shape
-		print "Reshaped Img Feature: ", img_ft_reshaped.shape
+		print("Reshaped Sent Feature: ", sent_ft_reshaped.shape)
+		print("Reshaped Img Feature: ", img_ft_reshaped.shape)
 		wrong_fts = np.concatenate((img_ft_reshaped, sent_ft_reshaped), axis=0)
-		print "Wrong_Fts Shape: ", wrong_fts.shape
+		print("Wrong_Fts Shape: ", wrong_fts.shape)
 		wrong_list.append(wrong_fts)
-		print ""
+		print("")
 	wrong_list_arr = np.concatenate(wrong_list, axis=0)
-	print "Shape of stacked: ", wrong_list_arr.shape
+	print("Shape of stacked: ", wrong_list_arr.shape)
 	return wrong_list_arr # returned feature array. 
+
+
+def next_batch(data, size):
+    idx = np.arange(0 , len(data))
+    np.random.shuffle(idx)
+    idx = idx[:size]
+    data_shuffle = [data[ i] for i in idx]
+    return np.asarray(data_shuffle)
