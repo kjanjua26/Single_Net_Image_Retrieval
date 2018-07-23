@@ -76,4 +76,4 @@ def own_loss(model1, model2, y):
 		
 		tmp_k = tf.tensordot(y,tf.square(k_norm), axes=0)
 		tmp2_k = tf.tensordot((1 - y), tf.square(tf.maximum((margin - k_norm),0)), axes=0)		
-		return tf.reduce_mean(tmp+tmp2)/2 + tf.reduce_mean(tmp_coss + tmp2_coss)/2
+		return tf.reduce_mean(tmp+tmp2)/2 + tf.reduce_mean(tmp_coss + tmp2_coss)/2 + tf.reduce_mean(ce_1)/2 + tf.reduce_mean(ce_2)/2
