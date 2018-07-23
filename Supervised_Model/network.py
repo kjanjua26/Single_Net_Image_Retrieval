@@ -51,3 +51,29 @@ def embedding_loss(im_embeds, sent_embeds, im_labels):
     loss = im_loss * im_loss_factor + sent_loss + sent_only_loss * sent_only_loss_factor
     
     return loss
+
+def own_loss(model1, model2, y):
+	margin = 0.2
+	with tf.name_scope("own-loss"):
+		x1_square = tf.reshape(tf.reduce_sum(model1*model1, axis=1), [-1, 1])
+		x2_square = tf.reshape(tf.reduce_sum(model2*model2, axis=1), [1, -1])
+		y = tf.to_float(y)
+		softmax_1 = tf.nn.softmax(model1)
+		ce_1 = -tf.reduce_sum(tf.tensordot(y, tf.log(softmax_1), axes=0), 1)
+		ce_1 = 0.1*ce_1
+		coss_dist = tf.losses.cosine_distance(tf.nn.l2_normalize(x1_square, 0), tf.nn.l2_normalize(x2_square, 0), dim=0)
+		softmax_2 = tf.nn.softmax(model2)
+		ce_2 = -tf.reduce_sum(tf.tensordot(y, tf.log(softmax_2), axes=0), 1)
+		ce_2 = ce_2*0.1
+
+		d =  pdist(model1, model2)
+		tmp = tf.tensordot(y,tf.square(d), axes=0)
+		tmp2 = tf.tensordot((1 - y), tf.square(tf.maximum((	margin - d),0)), axes=0)
+		k_norm = tf.pow(tf.reduce_sum(tf.pow(x1_square-x2_square,1)),1)
+		
+		tmp_coss = tf.tensordot(y, tf.square(coss_dist), axes=0)
+		tmp2_coss = tf.tensordot((1 - y), tf.square(tf.maximum((margin - coss_dist),0)), axes=0)
+		
+		tmp_k = tf.tensordot(y,tf.square(k_norm), axes=0)
+		tmp2_k = tf.tensordot((1 - y), tf.square(tf.maximum((margin - k_norm),0)), axes=0)		
+		return tf.reduce_mean(tmp+tmp2)/2 + tf.reduce_mean(tmp_coss + tmp2_coss)/2
